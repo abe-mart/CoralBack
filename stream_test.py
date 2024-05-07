@@ -32,10 +32,36 @@ if uploaded_file is not None:
     background = addShadow(foreground,background,x_offset=0,y_offset=-50,x_blur_offset=0,y_blur_offset=0,lighten_amount=0,blur_amount=0,alpha_reduction=3.5)
     
     if use_water: background.paste(watermark, (0,331), watermark)
-    
-    font = ImageFont.truetype(font='Fonts/Bebas.ttf',size=248)
+
+    ## Resize title to fit square background
+    # Define font
+    font_size = 248
+    font = ImageFont.truetype(font='Fonts/Bebas.ttf', size=font_size)
     draw = ImageDraw.Draw(im=background)
-    draw.text(xy=(bg_w // 2, 166), text=filename_up, font=font, fill=(214,131,63), anchor='mm') 
+
+    # Get the width and height of the text
+    text = filename_up
+    text_width, text_height = draw.textsize(text, font=font)
+
+    # Constants
+    desired_width = 1800  # Specify your desired width here
+
+    # Reduce font size if text width exceeds desired width
+    while text_width > desired_width:
+        font_size -= 1
+        font = ImageFont.truetype(font='Fonts/Bebas.ttf', size=font_size)
+        text_width, text_height = draw.textsize(text, font=font)
+        
+    # Calculate the coordinates for centering the text
+    text_x = (background.width) // 2
+    text_y = 163  # Adjust the y-coordinate as needed
+
+    # Draw the text on the image with the adjusted font size
+    draw.text(xy=(text_x, text_y), text=text, font=font, fill=(214, 131, 63), anchor='mm')
+    
+    # font = ImageFont.truetype(font='Fonts/Bebas.ttf',size=248)
+    # draw = ImageDraw.Draw(im=background)
+    # draw.text(xy=(bg_w // 2, 166), text=filename_up, font=font, fill=(214,131,63), anchor='mm') 
     
     img_byte_arr = io.BytesIO()
     background.save(img_byte_arr, format='jpeg')
