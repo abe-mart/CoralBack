@@ -34,14 +34,15 @@ if uploaded_file is not None:
     if use_water: background.paste(watermark, (0,331), watermark)
 
     ## Resize title to fit square background
+    text = filename_up
     # Define font
     font_size = 248
     font = ImageFont.truetype(font='Fonts/Bebas.ttf', size=font_size)
     draw = ImageDraw.Draw(im=background)
 
-    # Get the width and height of the text
-    text = filename_up
-    text_width, text_height = draw.textsize(text, font=font)
+    # Get the bounding box of the text
+    text_bbox = draw.textbbox((0, 0), text=filename_up, font=font)
+    text_width, text_height = text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1]
 
     # Constants
     desired_width = 1800  # Specify your desired width here
@@ -50,7 +51,8 @@ if uploaded_file is not None:
     while text_width > desired_width:
         font_size -= 1
         font = ImageFont.truetype(font='Fonts/Bebas.ttf', size=font_size)
-        text_width, text_height = draw.textsize(text, font=font)
+        text_bbox = draw.textbbox((0, 0), text=filename_up, font=font)
+        text_width, text_height = text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1]
         
     # Calculate the coordinates for centering the text
     text_x = (background.width) // 2
