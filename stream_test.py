@@ -186,3 +186,6 @@ if uploaded_file is not None:
                 zip_file.write(os.path.join(tmp,file_and_name[1]),file_and_name[1])
     
     st.download_button('Down It',data=zip_buffer,file_name=filename_up+'_listing_images.zip',mime="application/zip")
+
+
+st.link_button('Video Mockup Creator', url='https://coralvideo.streamlit.app/', icon='video_camera_front')
